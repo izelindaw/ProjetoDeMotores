@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public int pontos = 0;
-
     public float velocidade = 10f;
     public float forcaPulo = 10f;
-    public float forcaMola = 15f; // Força da mola
 
     public bool noChao = false;
     public bool andando = false;
-    public bool impulso = false;
 
     private Rigidbody2D _rigidbody2D;
     private SpriteRenderer _spriteRenderer;
@@ -31,29 +27,6 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "chao")
         {
             noChao = true;
-        }
-
-        // Se o jogador pisar em um objeto com a tag "pulapula", ele será lançado para cima automaticamente
-        if (collision.gameObject.tag == "pulapula")
-        {
-            _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, 0); // Zera a velocidade vertical
-            _rigidbody2D.AddForce(Vector2.up * forcaMola, ForceMode2D.Impulse);
-            impulso = true;
-        }
-    }
-
-    void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "chao")
-        {
-            noChao = false;
-        }
-
-        if (collision.gameObject.tag == "pulapula")
-        {
-            _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, 0); // Zera a velocidade vertical
-            _rigidbody2D.AddForce(Vector2.up * forcaMola, ForceMode2D.Impulse);
-            impulso = false;
         }
     }
 
@@ -86,7 +59,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.UpArrow) && noChao == true)
+        if (Input.GetKeyDown(KeyCode.Space) && noChao == true)
         {
             _rigidbody2D.AddForce(new Vector2(0, 1) * forcaPulo, ForceMode2D.Impulse);
             Debug.Log("Jump");
@@ -94,6 +67,5 @@ public class Player : MonoBehaviour
         
         _animator.SetBool("Andando", andando);
         _animator.SetBool("Caindo", !noChao);
-        _animator.SetBool("Impulso", impulso);
     }
 }
